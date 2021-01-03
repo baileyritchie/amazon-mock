@@ -8,6 +8,8 @@ import productRouter from './routers/productRouter.js';
 dotenv.config();
 const DB_URL = process.env.DB_URL;
 const app = express();
+app.use(express.json()); // parsing json data middleware
+app.use(express.urlencoded({extended:true}));
 const PORT = process.env.port || 5000;
 
 app.use('/api/products', productRouter);
