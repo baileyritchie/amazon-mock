@@ -3,13 +3,19 @@ import HomeScreen from './Screens/HomeScreen';
 import ProductScreen from './Screens/ProductScreen';
 import {BrowserRouter,Link,Route} from 'react-router-dom';
 import CartScreen from './Screens/CartScreen';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import SignInScreen from './Screens/SignInScreen';
+import { signout } from './actions/userActions';
 
 function App() {
   const cart = useSelector(state => state.cart);
   const {cartItems} = cart;
-
+  const userSignin = useSelector((state) => state.userSignin);
+  const {userInfo} = userSignin;
+  const dispatch = useDispatch();
+  const signoutHandler = () => {
+    dispatch(signout());
+  }
   return (
     <BrowserRouter>
       <div className="grid-container">
@@ -18,13 +24,28 @@ function App() {
             <Link className="brand" to="/">amazona</Link>
           </div>
           <div>
-            <Link to="/cart">Cart</Link>
+            <Link to="/cart">Cart
             {
               cartItems.length > 0 && (
                 <span className="badge">{cartItems.length}</span>
               )
-            }
-            <Link to="/signin">Sign In</Link> 
+            }</Link>
+            {userInfo ? (
+              <div className="dropdown">
+                <Link to="#">
+                  {userInfo.name} <i className="fa fa-caret-down"></i>{' '}
+                </Link>
+                <ul className="dropdown-content">
+                  <li>
+                    <Link to="#signout" onClick={signoutHandler}>
+                      Sign Out
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            ) : (
+              <Link to="/signin">Sign In</Link>
+            )}
           </div>
         </header>
         <main>
