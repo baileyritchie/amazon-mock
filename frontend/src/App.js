@@ -7,16 +7,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import SignInScreen from './Screens/SignInScreen';
 import { signout } from './actions/userActions';
 import RegisterScreen from './Screens/RegisterScreen';
+import ShippingAddressScreen from './Screens/ShippingAddressScreen';
 
 function App() {
   const cart = useSelector(state => state.cart);
   const {cartItems} = cart;
   const userSignin = useSelector((state) => state.userSignin);
-  const {userInfo} = userSignin;
+  const { userInfo } = userSignin;
   const dispatch = useDispatch();
   const signoutHandler = () => {
     dispatch(signout());
-  }
+    console.log(userInfo.name);
+  };
   return (
     <BrowserRouter>
       <div className="grid-container">
@@ -25,12 +27,11 @@ function App() {
             <Link className="brand" to="/">amazona</Link>
           </div>
           <div>
-            <Link to="/cart">Cart
-            {
-              cartItems.length > 0 && (
+            <Link to="/cart">
+            Cart
+              {cartItems.length > 0 && (
                 <span className="badge">{cartItems.length}</span>
-              )
-            }</Link>
+              )}</Link>
             {userInfo ? (
               <div className="dropdown">
                 <Link to="#">
@@ -50,11 +51,12 @@ function App() {
           </div>
         </header>
         <main>
-          <Route path="/" component={HomeScreen} exact></Route>
           <Route path="/product/:id" component={ProductScreen}></Route>
           <Route path="/cart/:id?" component={CartScreen}></Route>
           <Route path="/signin" component={SignInScreen}></Route>
           <Route path="/register" component={RegisterScreen}></Route>
+          <Route path="/shipping" component={ShippingAddressScreen}></Route>
+          <Route path="/" component={HomeScreen} exact></Route>
         </main>
         <footer className="row center">All rights reserved</footer>
       </div>
