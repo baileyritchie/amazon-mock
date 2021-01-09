@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import userRouter from './routers/userRouter.js';
 import dotenv from 'dotenv';
 import productRouter from './routers/productRouter.js';
+import orderRouter from './routers/orderRouter.js';
 
 dotenv.config();
 const DB_URL = process.env.DB_URL;
@@ -12,8 +13,10 @@ app.use(express.json()); // parsing json data middleware
 app.use(express.urlencoded({extended:true}));
 const PORT = process.env.port || 5000;
 
-app.use('/api/products', productRouter);
 app.use('/api/users', userRouter);
+app.use('/api/products', productRouter);
+app.use('/api/orders',orderRouter);
+
 
 app.get('/', (req,res) => {
   res.send('Server is Ready...');
