@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import CheckoutSteps from '../Components/CheckoutSteps'
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import { Link } from 'react-router-dom';
+import { createOrder } from '../actions/orderActions';
+import { ORDER_CREATE_RESET } from '../constants/orderConstants';
+import LoadingBox from '../Components/LoadingBox';
+import MessageBox from '../Components/MessageBox';
 
 export default function PlaceOrderScreen(props) {
   const cart = useSelector((state) => state.cart);
@@ -15,9 +19,18 @@ export default function PlaceOrderScreen(props) {
   cart.shippingPrice  = cart.itemsPrice > 100 ? toPrice(0) : toPrice(10);
   cart.taxPrice = toPrice(0.15 * cart.itemsPrice);
   cart.totalPrice = cart.itemsPrice + cart.shippingPrice + cart.taxPrice;
+  const dispatch = useDispatch();
   const placeOrderHandler= () => {
-    // TODO dispatch();
+    dispatch(createOrder({...cart,orderItems: cart.cartItems}));
   }
+  const orderCreate = useSelector((state) => state.orderCreate);
+  const {loading,success,error,order} = orderCreate;
+  useEffect(() => {
+    if (success) {
+      props.history.push(`/order/${order._id}`);
+      dispatch({type:ORDER_CREATE_RESET});
+    }
+  },[dispatch, order, props.history, success])
   return (
     <div>
       <CheckoutSteps step1 step2 step3 step4></CheckoutSteps>
@@ -104,6 +117,8 @@ export default function PlaceOrderScreen(props) {
               <li>
                 <button type="button" onClick={placeOrderHandler} className="primary block" disabled={cart.cartItems.length === 0}>Place Order</button>
               </li>
+              {loading && <LoadingBox/>}
+              {error && <MessageBox variant="danger">{error}</MessageBox>}
             </ul>
           </div>
         </div>
