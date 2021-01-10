@@ -13,13 +13,14 @@ orderRouter.post( "/", isAuth, expressAsyncHandler(async(req,res) => {
       orderItems: req.body.orderItems,
       shippingAddress: req.body.shippingAddress,
       paymentMethod: req.body.paymentMethod,
+      itemsPrice: req.body.itemsPrice,
       shippingPrice: req.body.shippingPrice,
       taxPrice: req.body.taxPrice,
-      itemsPrice: req.body.itemsPrice,
-      user: req.user._id
+      totalPrice: req.body.totalPrice,
+      user: req.user._id,
     });
     const createdOrder = await order.save();
-    res.status(201).send({message: "New Order Created"});
+    res.status(201).send({message: "New Order Created",order:createdOrder});
     }
   })
 );
