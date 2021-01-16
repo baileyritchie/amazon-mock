@@ -6,6 +6,7 @@ import LoadingBox from '../Components/LoadingBox';
 import MessageBox from '../Components/MessageBox';
 import { detailsOrder, payOrder } from '../actions/orderActions';
 import Axios from 'axios';
+import { ORDER_PAY_RESET } from '../constants/orderConstants';
 
 export default function OrderScreen(props) {
   const orderId = props.match.params.id;
